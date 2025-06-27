@@ -1,0 +1,13 @@
+{
+  "name": "car-neural-network",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "AndrasHacks <mr.acs.andras@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "live-server"
+  },
+  "dependencies": {
+    "live-server": "^1.2.2"
+  }
+}
