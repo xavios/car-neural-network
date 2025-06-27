@@ -15,32 +15,17 @@ class Road {
     ctx.lineWidth = 5;
     ctx.strokeStyle = "white";
 
-    ctx.beginPath();
-    ctx.moveTo(this.left + 10, this.top);
-    ctx.lineTo(this.left + 10, this.bottom);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(this.right - 10, this.top);
-    ctx.lineTo(this.right - 10, this.bottom);
-    ctx.stroke();
-
-    let laneWidth = this.width / this.laneCount;
-    for (let i = 0; i < this.laneCount - 1; i++) {
-      let fill = true;
-      const lineLength = 30;
-      for (let j = 0; j < window.innerHeight; j += lineLength) {
-        if (fill) {
-          ctx.beginPath();
-          ctx.moveTo(laneWidth, j);
-          ctx.lineTo(laneWidth, j + 30);
-          ctx.stroke();
-        }
-
-        fill = !fill;
+    for (let i = 0; i <= this.laneCount; i++) {
+      const x = lerp(this.left + 5, this.right - 5, i / this.laneCount);
+      if (i == 0 || i == this.laneCount) {
+        ctx.setLineDash([]);
+      } else {
+        ctx.setLineDash([20, 20]);
       }
-
-      laneWidth += laneWidth;
+      ctx.beginPath();
+      ctx.moveTo(x, this.top);
+      ctx.lineTo(x, this.bottom);
+      ctx.stroke();
     }
   }
 }
