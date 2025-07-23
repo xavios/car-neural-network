@@ -3,25 +3,40 @@ class Road {
     this.x = x;
     this.width = width;
     this.laneCount = laneCount;
-    this.left = x - width / 2;
-    this.right = x + width / 2;
+    const margin = 5;
+    this.left = x - width / 2 + margin;
+    this.right = x + width / 2 - margin;
 
     const infinity = 1000000;
     this.top = -infinity;
     this.bottom = infinity;
+
+    this.topLeft = { x: this.left, y: this.top };
+    this.bottomLeft = { x: this.left, y: this.bottom };
+    this.topRight = { x: this.right, y: this.top };
+    this.bottomRight = { x: this.right, y: this.bottom };
+
+    this.borders = [
+      { start: this.topLeft, end: this.bottomLeft },
+      { start: this.topRight, end: this.bottomRight },
+    ];
   }
 
   draw() {
     ctx.lineWidth = 5;
     ctx.strokeStyle = "white";
 
-    for (let i = 0; i <= this.laneCount; i++) {
-      const laneLeft = lerp(this.left + 5, this.right - 5, i / this.laneCount);
-      if (i == 0 || i == this.laneCount) {
-        ctx.setLineDash([]);
-      } else {
-        ctx.setLineDash([20, 20]);
-      }
+    this.borders.forEach((border) => {
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(border.start.x, border.start.y);
+      ctx.lineTo(border.end.x, border.end.y);
+      ctx.stroke();
+    });
+
+    for (let i = 1; i <= this.laneCount - 1; i++) {
+      const laneLeft = lerp(this.left, this.right, i / this.laneCount);
+      ctx.setLineDash([20, 20]);
       ctx.beginPath();
       ctx.moveTo(laneLeft, this.top);
       ctx.lineTo(laneLeft, this.bottom);
@@ -30,28 +45,26 @@ class Road {
   }
 
   getLaneCenter(laneIndex) {
-    if (laneIndex == 0) {
-      const laneLeft = this.left + 5;
-      const laneRight = lerp(this.left + 5, this.right - 5, 1 / this.laneCount);
+    const firstLane = laneIndex == 0;
+    if (firstLane) {
+      const laneLeft = this.left;
+      const laneRight = lerp(this.left, this.right, 1 / this.laneCount);
       return lerp(laneLeft, laneRight, 0.5);
     }
-    if (laneIndex == this.laneCount - 1) {
+    const lastLane = laneIndex == this.laneCount - 1;
+    if (lastLane) {
       const laneLeft = lerp(
-        this.left + 5,
-        this.right - 5,
+        this.left,
+        this.right,
         (this.laneCount - 1) / this.laneCount
       );
-      const laneRight = this.right - 5;
+      const laneRight = this.right;
       return lerp(laneLeft, laneRight, 0.5);
     }
-    const laneLeft = lerp(
-      this.left + 5,
-      this.right - 5,
-      laneIndex / this.laneCount
-    );
+    const laneLeft = lerp(this.left, this.right, laneIndex / this.laneCount);
     const laneRight = lerp(
-      this.left + 5,
-      this.right - 5,
+      this.left,
+      this.right,
       (laneIndex + 1) / this.laneCount
     );
     return lerp(laneLeft, laneRight, 0.5);

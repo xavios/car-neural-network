@@ -15,6 +15,9 @@ class Car {
 
   draw(ctx) {
     ctx.save();
+    // adds a translation transformation to the current matrix by moving
+    // the canvas and its origin x units horizontally and y units vertically
+    // on the grid.
     ctx.translate(this.x, this.y);
     ctx.rotate(-this.angle);
     ctx.beginPath();
@@ -34,6 +37,24 @@ class Car {
     if (this.controlls.reverse) {
       this.speed -= this.acceleration;
     }
+    this.limitSpeed();
+
+    if (this.speed != 0) {
+      const flip = this.speed > 0 ? 1 : -1;
+
+      if (this.controlls.left) {
+        this.angle += 0.03 * flip;
+      }
+      if (this.controlls.right) {
+        this.angle -= 0.03 * flip;
+      }
+    }
+
+    this.x -= Math.sin(this.angle) * this.speed;
+    this.y -= Math.cos(this.angle) * this.speed;
+  }
+
+  limitSpeed() {
     if (this.speed > this.maxSpeed) {
       this.speed = this.maxSpeed;
     }
@@ -49,19 +70,5 @@ class Car {
     if (Math.abs(this.speed) < this.friction) {
       this.speed = 0;
     }
-
-    if (this.speed != 0) {
-      const flip = this.speed > 0 ? 1 : -1;
-
-      if (this.controlls.left) {
-        this.angle += 0.03 * flip;
-      }
-      if (this.controlls.right) {
-        this.angle -= 0.03 * flip;
-      }
-    }
-
-    this.x -= Math.sin(this.angle) * this.speed;
-    this.y -= Math.cos(this.angle) * this.speed;
   }
 }

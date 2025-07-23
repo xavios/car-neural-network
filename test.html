@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content="Webpage description goes here" />
+    <meta charset="utf-8" />
+    <title>Test ray casts..</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="" />
+  </head>
+
+  <body>
+    <canvas id="myCanvas"></canvas>
+    <script>
+      const canvas = document.getElementById("myCanvas");
+      canvas.width = 800;
+      canvas.height = 600;
+      const ctx = canvas.getContext("2d");
+      ctx.translate(100, 100);
+      ctx.lineWidth = 3;
+      ctx.rect(10, 10, 50, 80);
+      ctx.stroke();
+
+      const origo = { x: 10 + 25, y: 10 + 40 };
+
+      const rayCnt = 3;
+      const rayLenght = 100;
+      ctx.strokeStyle = "yellow";
+      const baseAngle = Math.PI / 4;
+      for (let i = 0; i < rayCnt; i++) {
+        // understad this more :(
+        const angle = lerp(baseAngle, -baseAngle, i / rayCnt) + -Math.PI / 16;
+        console.log(angle);
+        const x = origo.x - Math.sin(angle) * rayLenght;
+        const y = origo.y - Math.cos(angle) * rayLenght;
+        console.log(i, x, y);
+        ctx.beginPath();
+        ctx.moveTo(origo.x, origo.y);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      }
+
+      function lerp(a, b, percent) {
+        return a + (b - a) * percent;
+      }
+    </script>
+  </body>
+  <!-- adding curves to the road would be a nice homework -->
+</html>
