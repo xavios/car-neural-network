@@ -4,7 +4,7 @@ canvas.width = 320;
 const ctx = canvas.getContext("2d");
 const road = new Road(canvas.width / 2, canvas.width, 5);
 const car = new Car(road.getLaneCenter(3), window.innerHeight / 2, {
-  type: "DRIVEABLE",
+  type: "AI",
   color: "blue",
 });
 

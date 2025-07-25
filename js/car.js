@@ -17,12 +17,16 @@ class Car {
     this.friction = 0.05;
     this.angle = 0;
 
-    if (this.options.type === "DRIVEABLE") {
+    if (this.options.type === "DRIVEABLE" || this.options.type === "AI") {
       this.sensor = new Sensor(this);
     }
     this.controlls = new Controlls(this.options.type);
     this.polygon = [];
     this.damaged = false;
+
+    if (this.options.type === "AI") {
+      this.brain = new NeuralNetwork([this.sensor.rayCount, 6, 4]);
+    }
   }
 
   draw(ctx) {
@@ -49,9 +53,22 @@ class Car {
       if (this.sensor) {
         this.sensor.update(roadBorders, traffic);
       }
-    }
-    if (!this.damaged) {
       this.damaged = this.#setDamaged(roadBorders, traffic);
+
+      if (this.brain) {
+        const controlls = NeuralNetwork.feedForward(
+          this.sensor.readings.map((s) => {
+            return s !== null ? 1 - s.offset : 0;
+          }),
+          this.brain
+        );
+
+        this.controlls.forward = controlls[0];
+        this.controlls.left = controlls[1];
+        this.controlls.right = controlls[2];
+        this.controlls.reverse = controlls[3];
+        console.log(this.controlls);
+      }
     }
   }
 
