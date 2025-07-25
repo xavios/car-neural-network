@@ -82,7 +82,7 @@ class Sensor {
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.strokeStyle = "black";
+        ctx.strokeStyle = "orange";
         ctx.moveTo(this.readings[i].x, this.readings[i].y);
         ctx.lineTo(ray.end.x, ray.end.y);
         ctx.stroke();

@@ -5,6 +5,7 @@ class Car {
       height: options && options.height ? options.height : 80,
       type: options && options.type ? options.type : "DUMMY",
       maxSpeed: options && options.maxSpeed ? options.maxSpeed : 5,
+      color: options && options.color ? options.color : "black",
     };
     this.x = x;
     this.y = y;
@@ -25,7 +26,7 @@ class Car {
   }
 
   draw(ctx) {
-    ctx.fillStyle = "black";
+    ctx.fillStyle = this.options.color;
     if (this.damaged) {
       ctx.fillStyle = "grey";
     }
