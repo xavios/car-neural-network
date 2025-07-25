@@ -5,7 +5,6 @@ class Car {
       height: options && options.height ? options.height : 80,
       type: options && options.type ? options.type : "DUMMY",
       maxSpeed: options && options.maxSpeed ? options.maxSpeed : 5,
-      haveSensors: options && options.haveSensors ? options.haveSensors : false,
     };
     this.x = x;
     this.y = y;
@@ -17,15 +16,8 @@ class Car {
     this.friction = 0.05;
     this.angle = 0;
 
-    if (this.options.haveSensors) {
+    if (this.options.type === "DRIVEABLE") {
       this.sensor = new Sensor(this);
-    } else {
-      // add dummy sensore object to ensure that
-      // the code is not breaking
-      this.sensor = {
-        draw: (ctx) => {},
-        update: (border) => {},
-      };
     }
     this.controlls = new Controlls(this.options.type);
     this.polygon = [];
@@ -44,25 +36,37 @@ class Car {
     }
     ctx.fill();
 
-    this.sensor.draw(ctx);
+    if (this.sensor) {
+      this.sensor.draw(ctx);
+    }
   }
 
-  update(roadBorders) {
+  update(roadBorders, traffic) {
     if (!this.damaged) {
       this.#move();
       this.polygon = this.#createPolygon();
-      this.sensor.update(roadBorders);
+      if (this.sensor) {
+        this.sensor.update(roadBorders, traffic);
+      }
     }
-    this.#setDamaged(roadBorders);
+    if (!this.damaged) {
+      this.damaged = this.#setDamaged(roadBorders, traffic);
+    }
   }
 
-  #setDamaged(roadBorders) {
-    for (let border of roadBorders)
+  #setDamaged(roadBorders, traffic) {
+    let damaged = false;
+    for (let border of roadBorders) {
       if (poplyInterSect(this.polygon, border)) {
-        this.damaged = true;
-        return;
+        damaged = true;
       }
-    this.damaged = false;
+    }
+    for (let i = 0; i < traffic.length; i++) {
+      if (poplyInterSect(this.polygon, traffic[i].polygon)) {
+        damaged = true;
+      }
+    }
+    return damaged;
   }
 
   #createPolygon() {

@@ -13,17 +13,17 @@ class Sensor {
   // I need to respresent it in a way, that the line for the ray
   // will be black from onwards of the first touch of a border.
 
-  update(roadBorders) {
+  update(roadBorders, traffic) {
     this.roadBorders = roadBorders;
     this.#castRays();
     this.readings = [];
     for (let ray of this.rays) {
-      this.readings.push(this.#getReadings(ray));
+      this.readings.push(this.#getReadings(ray, traffic));
     }
     // once I casted the rays, I should add if the ray has readings
   }
 
-  #getReadings(ray) {
+  #getReadings(ray, traffic) {
     const touches = [];
     for (let border of this.roadBorders) {
       const touch = getIntersection(
@@ -34,6 +34,12 @@ class Sensor {
       );
       if (!!touch) {
         touches.push(touch);
+      }
+    }
+    for (let i = 0; i < traffic.length; i++) {
+      const polyTouches = getPolyInterSects(ray, traffic[i].polygon);
+      if (polyTouches) {
+        touches.push(...polyTouches);
       }
     }
     if (touches.length === 0) {

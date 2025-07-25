@@ -25,21 +25,32 @@ function getIntersection(A, B, C, D) {
   return null;
 }
 
-function poplyInterSect(polyA, polyB) {
+function getPolyInterSects(polyA, polyB) {
+  const touches = [];
   const segmentsA = getSegments(polyA);
   const segmentsB = getSegments(polyB);
   for (let segmentA of segmentsA) {
     for (let segmentB of segmentsB) {
-      const touches = getIntersection(
+      const touch = getIntersection(
         segmentA.start,
         segmentA.end,
         segmentB.start,
         segmentB.end
       );
-      if (touches) {
-        return true;
+      if (touch) {
+        touches.push(touch);
       }
     }
+  }
+  if (touches.length > 0) {
+    return touches;
+  }
+  return null;
+}
+
+function poplyInterSect(polyA, polyB) {
+  if (getPolyInterSects(polyA, polyB)) {
+    return true;
   }
   return false;
 }
