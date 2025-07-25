@@ -29,7 +29,7 @@ class Car {
     }
   }
 
-  draw(ctx) {
+  draw(ctx, drawSensors) {
     ctx.fillStyle = this.options.color;
     if (this.damaged) {
       ctx.fillStyle = "grey";
@@ -41,7 +41,7 @@ class Car {
     }
     ctx.fill();
 
-    if (this.sensor) {
+    if (this.sensor && drawSensors) {
       this.sensor.draw(ctx);
     }
   }
@@ -67,7 +67,6 @@ class Car {
         this.controlls.left = controlls[1];
         this.controlls.right = controlls[2];
         this.controlls.reverse = controlls[3];
-        console.log(this.controlls);
       }
     }
   }
