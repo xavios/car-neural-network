@@ -26,13 +26,25 @@
       const rayLenght = 100;
       ctx.strokeStyle = "yellow";
       const baseAngle = Math.PI / 4;
-      for (let i = 0; i < rayCnt; i++) {
-        // understad this more :(
-        const angle = lerp(baseAngle, -baseAngle, i / rayCnt) + -Math.PI / 16;
-        console.log(angle);
-        const x = origo.x - Math.sin(angle) * rayLenght;
+      console.log(Math.PI / 4, "45°");
+      for (let i = 0; i <= rayCnt - 1; i++) {
+        const angle = lerp(baseAngle, -baseAngle, i / (rayCnt - 1));
+        console.log(
+          "Ray calculation: percent: ",
+          i / (rayCnt - 1),
+          ", angle: ",
+          angle,
+          ", sin(angle) = ",
+          Math.sin(angle),
+          ", cos(angle) = ",
+          Math.cos(angle),
+          ", x: ",
+          origo.x + Math.sin(angle) * rayLenght,
+          ", y: ",
+          origo.y - Math.cos(angle) * rayLenght
+        );
+        const x = origo.x + Math.sin(angle) * rayLenght;
         const y = origo.y - Math.cos(angle) * rayLenght;
-        console.log(i, x, y);
         ctx.beginPath();
         ctx.moveTo(origo.x, origo.y);
         ctx.lineTo(x, y);
