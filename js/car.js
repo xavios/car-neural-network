@@ -13,10 +13,14 @@ class Car {
     this.sensor = new Sensor(this);
     this.controlls = new Controlls();
     this.polygon = [];
+    this.damaged = false;
   }
 
   draw(ctx) {
-    ctx.save();
+    ctx.fillStyle = "black";
+    if (this.damaged) {
+      ctx.fillStyle = "grey";
+    }
     ctx.beginPath();
     ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
     for (let i = 1; i < this.polygon.length; i++) {
@@ -31,6 +35,16 @@ class Car {
     this.#move();
     this.polygon = this.#createPolygon();
     this.sensor.update(roadBorders);
+    this.#setDamaged(roadBorders);
+  }
+
+  #setDamaged(roadBorders) {
+    for (let border of roadBorders)
+      if (poplyInterSect(this.polygon, border)) {
+        this.damaged = true;
+        return;
+      }
+    this.damaged = false;
   }
 
   #createPolygon() {

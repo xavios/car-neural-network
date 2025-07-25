@@ -3,7 +3,7 @@ canvas.width = 320;
 
 const ctx = canvas.getContext("2d");
 const road = new Road(canvas.width / 2, canvas.width, 5);
-const car = new Car(road.getLaneCenter(3), window.innerHeight / 2, 30, 50);
+const car = new Car(road.getLaneCenter(3), window.innerHeight / 2, 40, 80);
 animate();
 
 function animate() {

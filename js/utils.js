@@ -24,3 +24,34 @@ function getIntersection(A, B, C, D) {
 
   return null;
 }
+
+function poplyInterSect(polyA, polyB) {
+  const segmentsA = getSegments(polyA);
+  const segmentsB = getSegments(polyB);
+  for (let segmentA of segmentsA) {
+    for (let segmentB of segmentsB) {
+      const touches = getIntersection(
+        segmentA.start,
+        segmentA.end,
+        segmentB.start,
+        segmentB.end
+      );
+      if (touches) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function getSegments(polygon) {
+  if (polygon.start && polygon.end) {
+    return [polygon];
+  }
+  const segments = [];
+  for (let i = 0; i < polygon.length - 1; i++) {
+    segments.push({ start: polygon[i], end: polygon[i + 1] });
+  }
+  segments.push({ start: polygon[polygon.length - 1], end: polygon[0] });
+  return segments;
+}
