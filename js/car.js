@@ -1,17 +1,33 @@
 class Car {
-  constructor(x, y, width, height) {
+  constructor(x, y, options) {
+    this.options = {
+      width: options && options.width ? options.width : 40,
+      height: options && options.height ? options.height : 80,
+      type: options && options.type ? options.type : "DUMMY",
+      maxSpeed: options && options.maxSpeed ? options.maxSpeed : 5,
+      haveSensors: options && options.haveSensors ? options.haveSensors : false,
+    };
     this.x = x;
     this.y = y;
-    this.width = width;
-    this.height = height;
+    this.width = this.options.width;
+    this.height = this.options.height;
     this.speed = 0;
     this.acceleration = 0.5;
-    this.maxSpeed = 8;
+    this.maxSpeed = this.options.maxSpeed;
     this.friction = 0.05;
     this.angle = 0;
 
-    this.sensor = new Sensor(this);
-    this.controlls = new Controlls();
+    if (this.options.haveSensors) {
+      this.sensor = new Sensor(this);
+    } else {
+      // add dummy sensore object to ensure that
+      // the code is not breaking
+      this.sensor = {
+        draw: (ctx) => {},
+        update: (border) => {},
+      };
+    }
+    this.controlls = new Controlls(this.options.type);
     this.polygon = [];
     this.damaged = false;
   }
