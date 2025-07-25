@@ -66,3 +66,11 @@ function getSegments(polygon) {
   segments.push({ start: polygon[polygon.length - 1], end: polygon[0] });
   return segments;
 }
+
+function getRGBA(value) {
+  const alpha = Math.abs(value);
+  const R = value < 0 ? 0 : 255;
+  const G = R;
+  const B = value > 0 ? 0 : 255;
+  return "rgba(" + R + "," + G + "," + B + "," + alpha + ")";
+}

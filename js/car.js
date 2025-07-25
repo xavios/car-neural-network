@@ -25,7 +25,7 @@ class Car {
     this.damaged = false;
 
     if (this.options.type === "AI") {
-      this.brain = new NeuralNetwork([this.sensor.rayCount, 6, 4]);
+      this.brain = new NeuralNetwork([this.sensor.rayCount, 6, 8, 4]);
     }
   }
 

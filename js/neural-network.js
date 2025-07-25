@@ -17,10 +17,10 @@ class NeuralNetwork {
 
 class Level {
   constructor(inputCnt, outputCnt) {
-    this.input = new Array(inputCnt);
-    this.output = new Array(outputCnt);
+    this.inputs = new Array(inputCnt);
+    this.outputs = new Array(outputCnt);
 
-    this.bias = new Array(outputCnt);
+    this.biases = new Array(outputCnt);
 
     this.weights = new Array(inputCnt);
     for (let i = 0; i < inputCnt; i++) {
@@ -31,26 +31,26 @@ class Level {
   }
 
   #randomize() {
-    for (let i = 0; i < this.input.length; i++) {
-      for (let j = 0; j < this.output.length; j++) {
+    for (let i = 0; i < this.inputs.length; i++) {
+      for (let j = 0; j < this.outputs.length; j++) {
         this.weights[i][j] = Math.random() * 2 - 1;
       }
     }
 
-    for (let i = 0; i < this.output.length; i++) {
-      this.bias[i] = Math.random() * 2 - 1;
+    for (let i = 0; i < this.outputs.length; i++) {
+      this.biases[i] = Math.random() * 2 - 1;
     }
   }
 
   static feedForward(givenInputs, level) {
-    level.input = givenInputs;
-    for (let i = 0; i < level.output.length; i++) {
+    level.inputs = givenInputs;
+    for (let i = 0; i < level.outputs.length; i++) {
       let sum = 0;
-      for (let j = 0; j < level.input.length; j++) {
-        sum += level.input[j] * level.weights[j][i];
+      for (let j = 0; j < level.inputs.length; j++) {
+        sum += level.inputs[j] * level.weights[j][i];
       }
-      level.output[i] = sum > level.bias[i] ? 1 : 0;
+      level.outputs[i] = sum > level.biases[i] ? 1 : 0;
     }
-    return level.output;
+    return level.outputs;
   }
 }

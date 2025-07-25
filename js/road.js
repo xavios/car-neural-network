@@ -22,7 +22,7 @@ class Road {
     ];
   }
 
-  draw() {
+  draw(ctx) {
     ctx.lineWidth = 5;
     ctx.strokeStyle = "white";
 
